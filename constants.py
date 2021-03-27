@@ -23,3 +23,16 @@ def get_logger(log_path: str = None, level=logging.DEBUG) -> logging.Logger:
 
 
 LOGGER = get_logger()
+
+TOPICS = ['NO_TOPIC', 'earn', 'acq', 'money-fx', 'grain', 'crude', 'trade', 'interest', 'wheat', 'ship', 'corn',
+          'oilseed', 'sugar', 'coffee', 'gold', 'veg-oil', 'money-supply', 'dlr', 'gnp', 'livestock', 'soybean',
+          'nat-gas', 'bop', 'cpi', 'carcass', 'copper', 'reserves', 'cocoa', 'cotton', 'jobs', 'iron-steel', 'rice',
+          'barley', 'alum', 'rubber', 'ipi', 'meal-feed', 'gas', 'palm-oil', 'yen', 'silver', 'zinc', 'pet-chem',
+          'sorghum', 'rapeseed', 'strategic-metal', 'tin', 'wpi', 'orange', 'lead', 'retail', 'hog', 'heat', 'soy-oil',
+          'housing', 'soy-meal', 'fuel', 'dmk', 'lei', 'lumber', 'nickel', 'stg', 'oat', 'tea', 'sunseed', 'sun-oil',
+          'platinum', 'rape-oil', 'l-cattle', 'groundnut', 'plywood', 'jet', 'income', 'coconut', 'tapioca', 'propane',
+          'potato', 'instal-debt', 'coconut-oil', 'inventories', 'linseed', 'copra-cake', 'palmkernel',
+          'cornglutenfeed', 'wool', 'saudriyal', 'fishmeal', 'palladium', 'cpu', 'austdlr', 'naphtha', 'pork-belly',
+          'lin-oil', 'rye', 'red-bean', 'groundnut-oil', 'citruspulp', 'rape-meal', 'can', 'dfl', 'corn-oil', 'peseta',
+          'cotton-oil', 'nzdlr', 'rand', 'ringgit', 'castorseed', 'castor-oil', 'lit', 'rupiah', 'skr', 'nkr', 'dkr',
+          'sun-meal', 'lin-meal']
