@@ -1,6 +1,7 @@
 import collections
 import os
-from typing import List, Dict, Set
+import pickle
+from typing import List, Dict, Set, Tuple
 
 import nltk
 from bs4 import BeautifulSoup
@@ -24,7 +25,7 @@ class Preprocessor:
     TRAIN_TAG = 'lewissplit'
     TRAIN_SPLIT_STRING = 'TRAIN'
     DOC_TAG = 'reuters'
-    STATISTICS_OUT_DIR = 'statistics_out'
+    STATISTICS_OUT_DIR = '../statistics_out'
     NO_TOPIC = 'NO_TOPIC'
 
     def __init__(self):
@@ -48,7 +49,11 @@ class Preprocessor:
     def _save_statistics(self, save_stats: bool):
         if not save_stats:
             return
-        # TODO add
+        out_path = os.path.join(self.STATISTICS_OUT_DIR, 'vocab.pckl')
+        os.makedirs(self.STATISTICS_OUT_DIR, exist_ok=True)
+        with open(out_path, 'wb') as stream:
+            pickle.dump(self.worlds_counter, stream)
+        # TODO add other stats ?
 
     def normalize_text(self, text: str, remove_stop_words: bool = True, lemmatization: bool = True) -> List[str]:
         """Split text to sentences and tokens. Optional stop words removal and lemmatization. Returns list of tokens."""
@@ -83,8 +88,18 @@ class Preprocessor:
                 stream.write(line)
 
     @staticmethod
-    def read_data():
-        pass
+    def read_data(data_path: str, sep: str = ',') -> Tuple[List[str], List[str], List[str]]:
+        assert os.path.exists(data_path)
+        LOGGER.info(f'[data] writing normalized data to {os.path.abspath(data_path)}')
+        docs, topics, ids = [], [], []
+        with open(data_path) as stream:
+            lines = stream.readlines()
+            for line in lines:
+                doc, doc_topics, doc_newid = line.strip().split(sep)
+                docs.append(doc)
+                topics.append(doc_topics)
+                ids.append(doc_newid)
+        return docs, topics, ids
 
     @staticmethod
     def _get_chunk_paths(reuters_raw_path: str, chunk_ext: str = '.sgm') -> List[str]:
@@ -147,7 +162,7 @@ class Preprocessor:
                     continue
                 topics = self._get_topics(doc, self.NO_TOPIC)
                 is_train_split = self._get_is_train_split(doc)
-                self._update_statistics(doc, topics, is_train_split)
+                self._update_statistics(norm_body, topics, is_train_split)
 
                 # append to train/ test
                 norm_body = self._join_strings(norm_body)
