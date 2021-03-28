@@ -19,6 +19,8 @@ nltk.download('wordnet')
 
 
 class Preprocessor:
+    """Preprocess raw data. Parsing reuters-21578 set, train/test, split to tokens, remove stop words, lemmatization."""
+
     BODY_ID = 4
     TEXT_TAG = 'text'
     TITLE_TAG = 'title'
