@@ -90,7 +90,7 @@ class Preprocessor:
     @staticmethod
     def read_data(data_path: str, sep: str = ',') -> Tuple[List[str], List[str], List[str]]:
         assert os.path.exists(data_path)
-        LOGGER.info(f'[data] writing normalized data to {os.path.abspath(data_path)}')
+        LOGGER.info(f'[data] reading normalized data from {os.path.abspath(data_path)}')
         docs, topics, ids = [], [], []
         with open(data_path) as stream:
             lines = stream.readlines()
@@ -183,7 +183,7 @@ class Preprocessor:
         pass
 
 
-def prepare_data():
+def preprocess_raw_reuters_data():
     # parse config
     reuters_raw_path = CONFIG.get('DATA', 'reuters_raw_path')
     min_doc_length = CONFIG.getint('DATA', 'min_doc_length')
@@ -201,4 +201,4 @@ def prepare_data():
 
 
 if __name__ == '__main__':
-    prepare_data()
+    preprocess_raw_reuters_data()
