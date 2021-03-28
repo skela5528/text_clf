@@ -36,3 +36,7 @@ TOPICS = ['NO_TOPIC', 'earn', 'acq', 'money-fx', 'grain', 'crude', 'trade', 'int
           'lin-oil', 'rye', 'red-bean', 'groundnut-oil', 'citruspulp', 'rape-meal', 'can', 'dfl', 'corn-oil', 'peseta',
           'cotton-oil', 'nzdlr', 'rand', 'ringgit', 'castorseed', 'castor-oil', 'lit', 'rupiah', 'skr', 'nkr', 'dkr',
           'sun-meal', 'lin-meal']
+
+TOPICS_STRING = ' '.join(TOPICS)
+
+NUM_CLASSES = len(TOPICS)  # 115
