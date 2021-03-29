@@ -46,7 +46,7 @@ def get_model_lstm(vocabulary_size: int, embedding_dim: int = 64, doc_max_len: i
     dropout_p = 0.25
     model.add(tf.keras.layers.Dense(512, activation='elu'))
     model.add(tf.keras.layers.Dropout(dropout_p))
-    model.add(tf.keras.layers.Dense(units=num_classes, activation='softmax'))  # TODO revert sigmoid
+    model.add(tf.keras.layers.Dense(units=num_classes, activation='sigmoid'))
     return model
 
 
@@ -73,7 +73,8 @@ def train(save_model_path: str = 'models/best_model', model_name: str = 'lstm'):
     train_docs, train_topics, _ = Preprocessor.read_data(train_prep_data_path)
     test_docs, test_topics, _ = Preprocessor.read_data(test_prep_data_path)
     tf_data = TfDataHandler(**tf_data_params)
-    train_gen, test_gen = tf_data.get_tensorflow_data_generators(train_docs, train_topics, test_docs, test_topics)
+    is_term_freq_data = True if model_name == 'term_freq' else False
+    train_gen, test_gen = tf_data.get_tensorflow_data_generators(train_docs, train_topics, test_docs, test_topics, term_freq=is_term_freq_data)
 
     # train PARAMS
     learning_rate = 0.001
@@ -143,8 +144,8 @@ def label(text_paths: List[str], model_path: str, model_name: str = 'lstm', top_
 
     for text_path in text_paths:
         text = prep.preprocess_text_file(text_path)
-
-        tf_ready_data, _ = tf_data.prepare_data_for_tensorflow([text], [''])
+        is_term_freq_data = True if model_name == 'term_freq' else False
+        tf_ready_data, _ = tf_data.prepare_data_for_tensorflow([text], [''], term_freq=is_term_freq_data)
         tf_ready_data = tf_ready_data.reshape((1, -1))
         predictions = model(tf_ready_data)
         predictions = predictions.numpy().flatten()
