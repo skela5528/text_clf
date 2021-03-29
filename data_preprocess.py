@@ -181,8 +181,16 @@ class Preprocessor:
         self._save_statistics(save_stats)
         return (train_docs, train_topics, train_ids), (test_docs, test_topics, test_ids)
 
-    def preprocess_text_file(self, text_file_path: str):
-        pass
+    def preprocess_text_file(self, text_file_path: str) -> str:
+        assert os.path.exists(text_file_path)
+        # read file
+        with open(text_file_path) as stream:
+            text = stream.read()
+
+        # preprocess
+        tokens = self.normalize_text(text)
+        normalized_text = self._join_strings(tokens)
+        return normalized_text
 
 
 def preprocess_raw_reuters_data():
