@@ -25,7 +25,7 @@ class TfDataHandler:
         self.data_tokenizer = None   # type: Optional[Tokenizer]
         self.label_tokenizer = None  # type: Optional[Tokenizer]
 
-    def _setup_tokenizers(self, docs: List[str], topics: List[str], overwrite: bool = False):
+    def setup_tokenizers(self, docs: Optional[List[str]] = None, topics: Optional[List[str]] = None, overwrite: bool = False) -> bool:
         if os.path.exists(self.data_tokenizer_path) and not overwrite:
             self.data_tokenizer = self.read_tokenizer(self.data_tokenizer_path)
         else:
@@ -39,9 +39,11 @@ class TfDataHandler:
             self.label_tokenizer = Tokenizer(filters='', lower=False)
             self.label_tokenizer.fit_on_texts(topics)
             self.write_tokenizer(self.label_tokenizer, self.labels_tokenizer_path)
+        is_setup_succeed = self.data_tokenizer is not None and self.label_tokenizer is not None
+        return is_setup_succeed
 
-    def _prepare_data_for_tensorflow(self, docs: List[str], topics: List[str],
-                                     term_freq: bool, exclude_no_topic: bool) -> Tuple[np.ndarray, np.ndarray]:
+    def prepare_data_for_tensorflow(self, docs: List[str], topics: List[str],
+                                    term_freq: bool = False, exclude_no_topic: bool = False) -> Tuple[np.ndarray, np.ndarray]:
         LOGGER.info(f'[data-tf] prepare {len(docs)} docs | term_freq:{term_freq} ')
         if not term_freq:
             doc_sequences = self.data_tokenizer.texts_to_sequences(docs)
@@ -73,9 +75,9 @@ class TfDataHandler:
     def get_tensorflow_data_generators(self, train_docs: List[str], train_topics: List[str],
                                        test_docs: List[str], test_topics: List[str],
                                        term_freq: bool = False, exclude_no_topic: bool = False) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
-        self._setup_tokenizers(train_docs, train_topics)
-        train_docs, train_topics = self._prepare_data_for_tensorflow(train_docs, train_topics, term_freq, exclude_no_topic)
-        test_docs, test_topics = self._prepare_data_for_tensorflow(test_docs, test_topics, term_freq, exclude_no_topic)
+        self.setup_tokenizers(train_docs, train_topics)
+        train_docs, train_topics = self.prepare_data_for_tensorflow(train_docs, train_topics, term_freq, exclude_no_topic)
+        test_docs, test_topics = self.prepare_data_for_tensorflow(test_docs, test_topics, term_freq, exclude_no_topic)
         LOGGER.info(f'[data-tf] train size: {len(train_docs)}')
         LOGGER.info(f'[data-tf] test size: {len(test_docs)}')
 
