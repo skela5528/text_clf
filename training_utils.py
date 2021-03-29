@@ -3,6 +3,7 @@ from datetime import datetime
 
 import numpy as np
 import tensorflow as tf
+import tensorflow.python.keras.backend
 
 from data_tf import TfDataHandler
 
@@ -23,6 +24,8 @@ class TrainingUtils:
     def check_data(train_data_generator: tf.data.Dataset, tf_data: TfDataHandler):
         """Sanity check for data after all conversion to matrix form."""
 
+        text = ''
+        labels = ''
         in_batch_id = 1
         for i, (batch_docs, batch_labels) in enumerate(train_data_generator):
             if i > 0:
