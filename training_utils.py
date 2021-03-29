@@ -79,3 +79,12 @@ class TrainingUtils:
         f_score = tf.where(tf.math.is_nan(f_score), tf.zeros_like(f_score), f_score)
 
         return tf.reduce_mean(f_score)
+
+    @staticmethod
+    def get_class_weights(counts: np.ndarray) -> dict:
+        """Produce lower weight for frequent classes."""
+        weights = np.log(.1 * sum(counts) / counts)
+        weights[weights < 1] = 1
+        class_weight_dict = dict(zip(range(1, len(counts) + 1), weights))
+        class_weight_dict[0] = .01
+        return class_weight_dict
