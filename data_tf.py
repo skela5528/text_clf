@@ -40,6 +40,7 @@ class TfDataHandler:
             self.label_tokenizer.fit_on_texts(topics)
             self.write_tokenizer(self.label_tokenizer, self.labels_tokenizer_path)
         is_setup_succeed = self.data_tokenizer is not None and self.label_tokenizer is not None
+        LOGGER.info(f'[data-tf] data_tokenizer num_words: {self.data_tokenizer.num_words}')
         return is_setup_succeed
 
     def prepare_data_for_tensorflow(self, docs: List[str], topics: List[str],
