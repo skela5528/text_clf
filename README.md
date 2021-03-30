@@ -12,8 +12,8 @@ beautifulsoup4==4.9.3
 ```
 
 # how to run
-`main.py --mode train --model_path models/best_model_lstm`
+`main.py --mode train --model_path models/best_model_lstm_5k`
 
-`main.py --mode test --model_path models/best_model_lstm`
+`main.py --mode test --model_path models/best_model_lstm_5k`
 
-`main.py --mode label --model_path models/best_model_lstm --input_text_file data/text_doc_grain_rice.txt`
+`main.py --mode label --model_path models/best_model_lstm_5k --input_text_file data/text_doc_grain_rice.txt`
